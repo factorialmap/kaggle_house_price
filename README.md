@@ -7,8 +7,8 @@
   * [Exemplo de práticos ou uso comercial](#Exemplos-práticos-ou-de-uso-comercial)
 
 ### Por que eu gastaria tempo aprendendo isso?
-- Imagine que eu queira saber o preço médio dos imóveis em minha vizinhança ou em algum outro local que eu tenha desejo morar um dia
-- Imagine que eu queira participar de competições do kaggle que envolvam pré processamento de dados para construção de modelos
+- Imagine que eu queira saber o preço médio dos imóveis em minha vizinhança ou em algum outro local que eu tenha desejo de morar
+- Imagine que eu queira participar de competições do kaggle que envolvam pré processamento de dados para melhoria de modelos
 - Este material foi feito para esclarecer as etapas de pré processamento de dados também conhecido como feature engineering
 
 ### Neste material você vai ver:
