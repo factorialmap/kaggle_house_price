@@ -1,30 +1,75 @@
 ---
-title: "Untitled"
+title: Previsão preço de imóveis
 author: "Marcelo Carvalho dos Anjos"
 date: "24/11/2020"
 output: html_document
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 ```
 
-## R Markdown
+#### **O que é ?**
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+• Competição de modelos preditivos de preços de imóveis na cidade de Ames em Iowa Estados Unidos. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+#### **Qual o objetivo?**
 
-```{r cars}
-summary(cars)
+• Prever o preço de imóveis com base em um grupo de caracteristicas como banheiros, quartos, garagem etc.
+• Praticar a tarefa de engenharia de recursos 
+• Praticar a construção de modelos com arvores de decisão
+
+#### **Como fazer ?**
+
+• No R
+
+
+#### **Agradecimentos**
+
+- Dean De que disponibilizou o conjunto de dados para educação da ciencia dos dados como alternativa ao Boston Housing
+- https://www.tandfonline.com/doi/abs/10.1080/10691898.2011.11889627
+- Max Kuhn @topepo que populariza esse conjunto em uma série de documentos usando tidymodels, caret entre outros pacotes.
+
+
+
+#### **Vamos ao que interessa e o primeiro passo é carregar os pacotes**
+
+```{r packs}
+library(tidyverse)
+library(tidymodels)
+library(funModeling)
+library(janitor)
+library(ggpubr)
+library(vip)
 ```
 
-## Including Plots
+#### **Recebi ou baixei os dados e agora como eu separo ?**
 
-You can also embed plots, for example:
+Como os dados já vem separados do kaggle não será necessário usar a função de amostragem `initial_split()`. Neste caso será usado apenas a função para padronizar os nomes das variáveis no o formato `snake_case`. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+
+```{r data}
+train_ames <- read.csv("~/GitHub/kaggle_house_price/train.csv")  %>% clean_names()
+test_ames  <- read.csv("~/GitHub/kaggle_house_price/test.csv")   %>% clean_names()
+
+
+#check
+train_ames %>% 
+  funModeling::df_status()
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+E aogra, já tenho os dados formatados mas não quero usar o conjunto de teste logo de cara para trabalhar com o modelo ! É justamente o que iremos fazer agora e optaremos para criação de subconjuntos usando vfold cross validation.
+
+```{r cv}
+set.seed(2121)
+cv_ames <- vfold_cv(train_ames, v = 10, strata = "sale_price")
+
+```
+
+
+O próximo passo é partir para análise exploratória onde a pergunta chave é. O que faremos para que nossas variáveis tenham maior poder de predição e tornem nossos modelos mais precisos ?
+
+É importante lembrar que todos os modelos são formados por variáveis preditoras e variáveis de resposta. Então o que tal começar por encontrar as melhores variáveis e testar as correlações.
